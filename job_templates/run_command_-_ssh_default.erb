@@ -1,13 +1,16 @@
 <%#
-kind: job_template
 name: Run Command - SSH Default
 job_category: Commands
-description_format: "Run %{command}"
-provider_type: SSH
+description_format: Run %{command}
+snippet: false
 template_inputs:
 - name: command
-  description: Command to run on the host
-  input_type: user
   required: true
+  input_type: user
+  description: Command to run on the host
+  advanced: false
+provider_type: SSH
+kind: job_template
 %>
+
 <%= input("command") %>

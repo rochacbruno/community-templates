@@ -1,8 +1,8 @@
 <%#
 name: create_users
-kind: snippet
 snippet: true
--%>
+model: ProvisioningTemplate
+%>
 <%- users = @host.owner_type == 'Usergroup' ? @host.owner.all_users : [@host.owner] -%>
 <%- users.each do |user| -%>
 <%=   "useradd #{user.login}" %>

@@ -1,13 +1,13 @@
 <%#
-kind: snippet
 name: puppetlabs_repo
--%>
+snippet: true
+model: ProvisioningTemplate
+%>
 <%
-http_proxy   = host_param('http-proxy') ? " --httpproxy #{host_param('http-proxy')}" : nil
-http_port    = host_param('http-proxy-port') ? " --httpport #{host_param('http-proxy-port')}" : nil
-proxy_uri    = host_param('http-proxy') ? "http://#{host_param('http-proxy')}:#{host_param('http-proxy-port')}" : nil
+http_proxy   = @host.params['http-proxy'] ? " --httpproxy #{@host.params['http-proxy']}" : nil
+http_port    = @host.params['http-proxy-port'] ? " --httpport #{@host.params['http-proxy-port']}" : nil
+proxy_uri    = @host.params['http-proxy'] ? "http://#{@host.params['http-proxy']}:#{@host.params['http-proxy-port']}" : nil
 proxy_string = proxy_uri ? " -e https_proxy=#{proxy_uri}/" : ''
-proxy_string_bits = proxy_uri ? " -ProxyUsage Override -ProxyList #{proxy_uri}" : ''
 os_family = @host.operatingsystem.family
 os_major  = @host.operatingsystem.major.to_i
 os_name   = @host.operatingsystem.name
@@ -25,14 +25,11 @@ elsif os_family == 'Suse'
 elsif os_family == 'Debian'
   repo_host = 'apt.puppetlabs.com'
   repo_os = @host.operatingsystem.release_name
-elsif os_family == 'Windows'
-  repo_host = 'downloads.puppetlabs.com'
-  repo_os = 'windows'
 end
 
-if host_param_true?('enable-puppetlabs-repo')
+if @host.param_true?('enable-puppetlabs-repo')
   repo_name = 'puppetlabs-release'
-elsif host_param_true?('enable-puppetlabs-pc1-repo')
+elsif @host.param_true?('enable-puppetlabs-pc1-repo')
   repo_name = 'puppetlabs-release-pc1'
 end
 -%>
@@ -44,10 +41,5 @@ apt-get update
 apt-get -y install ca-certificates
 wget -O /tmp/<%= repo_name %>-<%= repo_os %>.deb<%= proxy_string %> https://<%= repo_host %>/<%= repo_name %>-<%= repo_os %>.deb
 dpkg -i /tmp/<%= repo_name %>-<%= repo_os %>.deb
-<% elsif os_family == 'Windows' -%>
-$puppet_agent_source = 'https://<%= repo_host %>/<%= repo_os %>/puppet-agent-<%= @host.architecture %>-latest.msi'
-$puppet_agent_msi = "${env:TEMP}\puppet-agent-<%= @host.architecture %>.msi"
-Write-Host "Downloading puppet-agent from ${$puppet_agent_source} to ${puppet_agent_msi}"
-Start-BitsTransfer -Source "${puppet_agent_source}" -Destination "${puppet_agent_msi}"<%= proxy_string_bits %>
 <% end -%>
 <% end -%>

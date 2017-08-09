@@ -1,7 +1,9 @@
 <%#
-kind: ZTP
 name: Junos default ZTP config
--%>
+snippet: false
+model: ProvisioningTemplate
+kind: ZTP
+%>
 system {
     host-name <%= @host.shortname %>;
     root-authentication {

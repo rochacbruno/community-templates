@@ -1,11 +1,11 @@
 <%#
-kind: PXELinux
 name: Kickstart default PXELinux
+snippet: false
+model: ProvisioningTemplate
+kind: PXELinux
 oses:
-- CentOS
-- Fedora
 - RedHat
--%>
+%>
 # This file was deployed via '<%= template_name %>' template
 
 <%
@@ -52,14 +52,14 @@ oses:
     options.push("inst.repo=#{@host.operatingsystem.medium_uri(@host)}")
   end
   
-  if host_param('blacklist')
-    options.push("modprobe.blacklist=" + host_param('blacklist').gsub(' ', ''))
+  if @host.params['blacklist']
+    options.push("modprobe.blacklist=" + @host.params['blacklist'].gsub(' ', ''))
   end
 
   ksoptions = options.join(' ')
 -%>
 
-TIMEOUT <%= host_param('loader_timeout') || 10 %>
+TIMEOUT <%= @host.params['loader_timeout'] || 10 %>
 DEFAULT <%= template_name %>
 
 LABEL <%= template_name %>

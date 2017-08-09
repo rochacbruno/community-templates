@@ -1,11 +1,11 @@
 #!gpxe
 <%#
-kind: iPXE
 name: AutoYaST default iPXE
-oses:
-- SLES
-- OpenSUSE
+snippet: false
+model: ProvisioningTemplate
+kind: iPXE
 %>
+
 
 <% boot_files_uris = @host.operatingsystem.boot_files_uri(@host.medium,@host.architecture) -%>
 <% kernel = boot_files_uris[0] -%>

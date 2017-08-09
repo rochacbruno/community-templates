@@ -1,8 +1,9 @@
 <%#
-kind: snippet
 name: saltstack_minion
+snippet: true
+model: ProvisioningTemplate
 %>
-master: <%= host_param('salt_master') %>
+master: <%= @host.params['salt_master'] %>
 log_level: warning
 
 <%#
@@ -14,4 +15,4 @@ log_level: warning
 # * {'roles': ['webserver', 'frontend']}
 #
 %>
-grains: <%= host_param('salt_grains') ? host_param('salt_grains') : '{}' %>
+grains: <%= @host.params['salt_grains'] ? @host.params['salt_grains'] : '{}' %>
