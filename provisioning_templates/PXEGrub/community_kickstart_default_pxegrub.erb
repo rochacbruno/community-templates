@@ -50,15 +50,15 @@ kind: PXEGrub
     options.push("inst.repo=#{@host.operatingsystem.medium_uri(@host)}")
   end
 
-  if host_param('blacklist')
-    options.push("modprobe.blacklist=" + host_param('blacklist').gsub(' ', ''))
+  if @host.params['blacklist']
+    options.push("modprobe.blacklist=" + @host.params['blacklist'].gsub(' ', ''))
   end
 
   ksoptions = options.join(' ')
 -%>
 
 default=0
-timeout=<%= host_param('loader_timeout') || 10 %>
+timeout=<%= @host.params['loader_timeout'] || 10 %>
 
 title <%= template_name %>
   root (nd)

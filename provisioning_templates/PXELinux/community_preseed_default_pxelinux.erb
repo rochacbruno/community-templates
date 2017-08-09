@@ -17,8 +17,8 @@ kind: PXELinux
 #
 <%
   options = []
-  if host_param('blacklist')
-    options << host_param('blacklist').split(',').collect{|x| "#{x.strip}.blacklist=yes"}.join(' ')
+  if @host.params['blacklist']
+    options << @host.params['blacklist'].split(',').collect{|x| "#{x.strip}.blacklist=yes"}.join(' ')
   end
   if @host.operatingsystem.name == 'Debian'
     options << "auto=true"
@@ -26,7 +26,7 @@ kind: PXELinux
   else
     options << 'console-setup/ask_detect=false console-setup/layout=USA console-setup/variant=USA keyboard-configuration/layoutcode=us localechooser/translation/warn-light=true localechooser/translation/warn-severe=true'
   end
-  options << "locale=#{host_param('lang') || 'en_US'}"
+  options << "locale=#{@host.params['lang'] || 'en_US'}"
   options = options.join(' ')
 -%>
 
